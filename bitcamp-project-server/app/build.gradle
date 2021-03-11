@@ -1,0 +1,35 @@
+
+plugins {
+  
+    id 'application'
+    id 'java'
+    id 'eclipse'
+}
+
+repositories {
+  
+    jcenter()
+}
+
+tasks.withType(JavaCompile) {
+    // $javac -encoding UTF-8 ...
+    options.encoding = 'UTF-8';
+}
+
+eclipse {
+    project {
+        name = "bitcamp-project-server"
+    }
+}
+dependencies {
+   
+    testImplementation 'junit:junit:4.13'
+implementation 'com.google.code.gson:gson:2.8.6'
+    // This dependency is used by the application.
+    implementation 'com.google.guava:guava:29.0-jre'
+}
+
+application {
+    // Define the main class for the application.
+    mainClass = 'eom.eomcs.pms.ServerApp'
+}
