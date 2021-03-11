@@ -1,14 +1,13 @@
 package com.eomcs.pms.handler;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import com.eomcs.driver.Statement;
 import com.eomcs.util.Prompt;
 
 public class MemberValidatorHandler  {
 
 
   public  static String inputMember(
-      String promptTitle, DataInputStream in, DataOutputStream out) throws Exception{
+      String promptTitle, Statement stmt) throws Exception{
 
     while (true) {
       String name = Prompt.inputString(promptTitle);
@@ -16,28 +15,18 @@ public class MemberValidatorHandler  {
         return null;
       } 
 
-      out.writeUTF("member/selectByName");
-      out.writeInt(1);
-      out.writeUTF(name);
-      out.flush();
+      stmt.executeQuery("member/selectByName", name);
 
-      String status = in.readUTF();
-      in.readInt();
-      String data = in.readUTF();
 
-      if (status.equals("success")) {
-        String[] fields = data.split(",");
-        return fields[1];
-      }
       System.out.println("등록된 회원이 아닙니다.");
     }
   }
 
   public static String inputMembers(
-      String promptTitle, DataInputStream in, DataOutputStream out) throws Exception{
+      String promptTitle, Statement stmt) throws Exception{
     String members = "";
     while (true) {
-      String name = inputMember(promptTitle, in, out);
+      String name = inputMember(promptTitle, stmt);
       if (name == null) {
         return members;
       } else {

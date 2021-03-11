@@ -1,7 +1,6 @@
 package com.eomcs.pms.handler;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import com.eomcs.driver.Statement;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.util.Prompt;
 
@@ -9,7 +8,7 @@ public class ProjectAddHandler implements Command {
 
 
   @Override
-  public void service(DataInputStream in, DataOutputStream out) throws Exception{
+  public void service(Statement stmt) throws Exception{
 
     System.out.println("[프로젝트 등록]");
 
@@ -22,32 +21,21 @@ public class ProjectAddHandler implements Command {
     p.setStartDate(Prompt.inputDate("시작일? "));
     p.setEndDate(Prompt.inputDate("종료일? "));
 
-    p.setOwner(MemberValidatorHandler.inputMember("만든이?(취소: 빈 문자열) ", in, out));
+    p.setOwner(MemberValidatorHandler.inputMember("만든이?(취소: 빈 문자열) ",stmt  ));
     if (p.getOwner() == null) {
       System.out.println("프로젝트 입력을 취소합니다.");
       return;
     }
 
-    p.setMembers(MemberValidatorHandler.inputMembers("팀원?(완료: 빈 문자열) ", in, out));
+    p.setMembers(MemberValidatorHandler.inputMembers("팀원?(완료: 빈 문자열) ", stmt));
 
-    out.writeUTF("project/insert");
-    out.writeInt(1);
-    out.writeUTF(String.format("%s,%s,%s,%s,%s,%s,%s",
+    stmt.executeQuery("project/insert", String.format("%s,%s,%s,%s,%s,%s,%s",
         p.getTitle(),
         p.getContent(),
         p.getStartDate(), 
         p.getEndDate(),
         p.getOwner(),
         p.getMembers()));
-    out.flush();
-
-    String status = in.readUTF();
-    in.readInt();
-
-    if (status.equals("error")) {
-      System.out.println(in.readUTF());
-      return;
-    }
 
     System.out.println("프로젝트를 등록했습니다.");
 

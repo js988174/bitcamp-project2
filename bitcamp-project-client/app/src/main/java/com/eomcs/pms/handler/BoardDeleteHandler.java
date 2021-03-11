@@ -1,33 +1,20 @@
 package com.eomcs.pms.handler;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import com.eomcs.driver.Statement;
 import com.eomcs.util.Prompt;
 
 public class BoardDeleteHandler implements Command {
 
 
   @Override
-  public void service(DataInputStream in, DataOutputStream out) throws Exception{
+  public void service(Statement stmt) throws Exception{
 
     System.out.println("[게시글 삭제]");
 
     int no = Prompt.inputInt("번호? ");
 
-    out.writeUTF("board/select");
-    out.writeInt(1);
-    out.writeUTF(Integer.toString(no));
-    out.flush();
+    stmt.executeQuery("board/select", Integer.toString(no));
 
-
-    String status = in.readUTF();
-    in.readInt();
-    String data = in.readUTF();
-
-    if(status.equals("error")) {
-      System.out.println(data);
-      return;
-    }
 
     String input = Prompt.inputString("정말 삭제하시겠습니까?(y/N) ");
     if (input.equalsIgnoreCase("Y")) {
@@ -35,19 +22,9 @@ public class BoardDeleteHandler implements Command {
       return;
     }
 
-    out.writeUTF("board/delete");
-    out.writeInt(1);
-    out.writeUTF(Integer.toString(no));
-    out.flush();
 
-    status = in.readUTF();
-    in.readInt();
+    stmt.executeUpdate("board/delete", Integer.toString(no));
 
-    if(status.equals("error")) {
-      System.out.println(in.readUTF());
-      return;
-
-    }
 
     System.out.println("게시글을 삭제하였습니다.");
 
