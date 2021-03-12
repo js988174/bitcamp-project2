@@ -2,13 +2,17 @@ package com.eomcs.pms.handler;
 
 import java.util.Iterator;
 import com.eomcs.driver.Statement;
+import com.eomcs.pms.domain.Task;
 
 public class TaskListHandler implements Command {
-
-
+  Statement stmt;
+  public TaskListHandler(Statement stmt) {
+    this.stmt = stmt;
+    // TODO Auto-generated constructor stub
+  }
 
   @Override
-  public void service(Statement stmt) throws Exception{
+  public void service() throws Exception{
 
     System.out.println("[작업 목록]");
 
@@ -22,7 +26,7 @@ public class TaskListHandler implements Command {
           fields[0], 
           fields[1], 
           fields[2],
-          fields[3],
+          Task.getStatusLabel(Integer.parseInt(fields[3])),
           fields[4]);
     }
   }

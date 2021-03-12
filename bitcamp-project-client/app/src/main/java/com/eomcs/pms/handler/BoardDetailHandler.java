@@ -6,9 +6,15 @@ import com.eomcs.util.Prompt;
 
 public class BoardDetailHandler implements Command {
 
+  Statement stmt;
+
+  public BoardDetailHandler(Statement stmt) {
+    this.stmt = stmt;
+  }
+
 
   @Override
-  public void service(Statement stmt) throws Exception{
+  public void service()  throws Exception{
 
     System.out.println("[게시글 상세보기]");
 

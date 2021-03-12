@@ -5,11 +5,15 @@ import com.eomcs.driver.Statement;
 import com.eomcs.util.Prompt;
 
 public class TaskDetailHandler implements Command {
-
+  Statement stmt;
+  public TaskDetailHandler(Statement stmt) {
+    this.stmt = stmt;
+    // TODO Auto-generated constructor stub
+  }
 
 
   @Override
-  public void service(Statement stmt) throws Exception{
+  public void service() throws Exception{
 
     System.out.println("[작업 상세보기]");
 

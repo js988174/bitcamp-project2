@@ -4,10 +4,13 @@ import com.eomcs.driver.Statement;
 import com.eomcs.util.Prompt;
 
 public class TaskDeleteHandler implements Command {
-
-
+  Statement stmt;
+  public TaskDeleteHandler(Statement stmt) {
+    this.stmt = stmt;
+    // TODO Auto-generated constructor stub
+  }
   @Override
-  public void service(Statement stmt) throws Exception{
+  public void service() throws Exception{
 
     System.out.println("[작업 삭제]");
 
@@ -21,7 +24,7 @@ public class TaskDeleteHandler implements Command {
       return;
     }
     stmt.executeUpdate("task/delete", Integer.toString(no));
-
+    System.out.println("작업을 삭제하였습니다.");
   }
 
 }

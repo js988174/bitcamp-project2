@@ -4,11 +4,14 @@ import java.util.Iterator;
 import com.eomcs.driver.Statement;
 
 public class MemberListHandler implements Command {
-
-
+  Statement stmt;
+  public MemberListHandler( Statement stmt) {
+    this.stmt = stmt;
+    // TODO Auto-generated constructor stub
+  }
 
   @Override
-  public void service(Statement stmt) throws Exception{
+  public void service() throws Exception{
 
     System.out.println("[회원 목록]");
 

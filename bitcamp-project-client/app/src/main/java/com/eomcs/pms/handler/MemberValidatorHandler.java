@@ -5,9 +5,13 @@ import com.eomcs.util.Prompt;
 
 public class MemberValidatorHandler  {
 
+  Statement stmt;
 
-  public  static String inputMember(
-      String promptTitle, Statement stmt) throws Exception{
+  public MemberValidatorHandler(Statement stmt) {
+    this.stmt = stmt;
+  }
+
+  public String inputMember(String promptTitle) {
 
     while (true) {
       String name = Prompt.inputString(promptTitle);
@@ -15,23 +19,24 @@ public class MemberValidatorHandler  {
         return null;
       } 
 
-      stmt.executeQuery("member/selectByName", name);
+      try {
+        return this.stmt.executeQuery("member/selectByName", name).next().split(",")[1];
+      } catch (Exception e) {
 
-
-      System.out.println("등록된 회원이 아닙니다.");
+        System.out.println("등록된 회원이 아닙니다.");
+      }
     }
   }
-
-  public static String inputMembers(
-      String promptTitle, Statement stmt) throws Exception{
+  public String inputMembers(
+      String promptTitle) {
     String members = "";
     while (true) {
-      String name = inputMember(promptTitle, stmt);
+      String name = inputMember(promptTitle);
       if (name == null) {
         return members;
       } else {
         if (!members.isEmpty()) {
-          members += ",";
+          members += "/";
         }
         members += name;
       }
