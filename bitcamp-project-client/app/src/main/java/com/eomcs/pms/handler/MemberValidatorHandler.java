@@ -1,15 +1,10 @@
 package com.eomcs.pms.handler;
 
-import com.eomcs.driver.Statement;
 import com.eomcs.util.Prompt;
 
 public class MemberValidatorHandler  {
 
-  Statement stmt;
 
-  public MemberValidatorHandler(Statement stmt) {
-    this.stmt = stmt;
-  }
 
   public String inputMember(String promptTitle) {
 

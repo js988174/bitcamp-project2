@@ -4,11 +4,11 @@ import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-import com.eomcs.driver.Statement;
 import com.eomcs.pms.handler.BoardAddHandler;
 import com.eomcs.pms.handler.BoardDeleteHandler;
 import com.eomcs.pms.handler.BoardDetailHandler;
 import com.eomcs.pms.handler.BoardListHandler;
+import com.eomcs.pms.handler.BoardSearchHandler;
 import com.eomcs.pms.handler.BoardUpdateHandler;
 import com.eomcs.pms.handler.Command;
 import com.eomcs.pms.handler.MemberAddHandler;
@@ -22,11 +22,6 @@ import com.eomcs.pms.handler.ProjectDeleteHandler;
 import com.eomcs.pms.handler.ProjectDetailHandler;
 import com.eomcs.pms.handler.ProjectListHandler;
 import com.eomcs.pms.handler.ProjectUpdateHandler;
-import com.eomcs.pms.handler.TaskAddHandler;
-import com.eomcs.pms.handler.TaskDeleteHandler;
-import com.eomcs.pms.handler.TaskDetailHandler;
-import com.eomcs.pms.handler.TaskListHandler;
-import com.eomcs.pms.handler.TaskUpdateHandler;
 import com.eomcs.util.Prompt;
 
 public class ClientApp {
@@ -56,37 +51,36 @@ public class ClientApp {
 
   public void execute() throws Exception{
     // 서버와 통신하는 것을 대행해 줄 객체를 준비한다.
-    Statement stmt = new Statement(serverAddress,port);
 
 
     // 사용자 명령을 처리하는 객체를 맵에 보관한다.
     HashMap<String,Command> commandMap = new HashMap<>();
 
-    commandMap.put("/board/add", new BoardAddHandler(stmt));
-    commandMap.put("/board/list", new BoardListHandler(stmt));
-    commandMap.put("/board/detail", new BoardDetailHandler(stmt));
-    commandMap.put("/board/update", new BoardUpdateHandler(stmt));
-    commandMap.put("/board/delete", new BoardDeleteHandler(stmt));
+    commandMap.put("/board/add", new BoardAddHandler());
+    commandMap.put("/board/list", new BoardListHandler());
+    commandMap.put("/board/detail", new BoardDetailHandler());
+    commandMap.put("/board/update", new BoardUpdateHandler());
+    commandMap.put("/board/delete", new BoardDeleteHandler());
+    commandMap.put("/board/search", new BoardSearchHandler());
 
-    commandMap.put("/member/add", new MemberAddHandler(stmt));
-    commandMap.put("/member/list", new MemberListHandler(stmt));
-    commandMap.put("/member/detail", new MemberDetailHandler(stmt));
-    commandMap.put("/member/update", new MemberUpdateHandler(stmt));
-    commandMap.put("/member/delete", new MemberDeleteHandler(stmt));
+    commandMap.put("/member/add", new MemberAddHandler());
+    commandMap.put("/member/list", new MemberListHandler());
+    commandMap.put("/member/detail", new MemberDetailHandler());
+    commandMap.put("/member/update", new MemberUpdateHandler());
+    commandMap.put("/member/delete", new MemberDeleteHandler());
+    MemberValidatorHandler memberValidator = new MemberValidatorHandler();
 
-    MemberValidatorHandler memberValidator = new MemberValidatorHandler(stmt);
+    commandMap.put("/project/add", new ProjectAddHandler(memberValidator));
+    commandMap.put("/project/list", new ProjectListHandler());
+    commandMap.put("/project/detail", new ProjectDetailHandler());
+    commandMap.put("/project/update", new ProjectUpdateHandler( memberValidator));
+    commandMap.put("/project/delete", new ProjectDeleteHandler());
 
-    commandMap.put("/project/add", new ProjectAddHandler(stmt,memberValidator));
-    commandMap.put("/project/list", new ProjectListHandler(stmt));
-    commandMap.put("/project/detail", new ProjectDetailHandler(stmt));
-    commandMap.put("/project/update", new ProjectUpdateHandler(stmt, memberValidator));
-    commandMap.put("/project/delete", new ProjectDeleteHandler(stmt));
-
-    commandMap.put("/task/add", new TaskAddHandler(stmt,memberValidator));
-    commandMap.put("/task/list", new TaskListHandler(stmt));
-    commandMap.put("/task/detail", new TaskDetailHandler(stmt));
-    commandMap.put("/task/update", new TaskUpdateHandler(stmt,memberValidator));
-    commandMap.put("/task/delete", new TaskDeleteHandler(stmt));
+    commandMap.put("/task/add", new TaskAddHandler(memberValidator));
+    commandMap.put("/task/list", new TaskListHandler());
+    commandMap.put("/task/detail", new TaskDetailHandler());
+    commandMap.put("/task/update", new TaskUpdateHandler(,memberValidator));
+    commandMap.put("/task/delete", new TaskDeleteHandler());
 
     try {
 
@@ -115,7 +109,7 @@ public class ClientApp {
               break;
             case "quit":
             case "exit":
-              stmt.executeUpdate("quit");
+
               System.out.println("안녕!");
               return;
             default:
@@ -140,7 +134,7 @@ public class ClientApp {
     }
 
     Prompt.close();
-    stmt.close();
+
   }
 
   private void printCommandHistory(Iterator<String> iterator) {

@@ -1,15 +1,12 @@
 package com.eomcs.pms.handler;
 
-import java.util.Iterator;
-import com.eomcs.driver.Statement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import com.eomcs.util.Prompt;
 
 public class TaskDetailHandler implements Command {
-  Statement stmt;
-  public TaskDetailHandler(Statement stmt) {
-    this.stmt = stmt;
-    // TODO Auto-generated constructor stub
-  }
 
 
   @Override
@@ -19,19 +16,25 @@ public class TaskDetailHandler implements Command {
 
     int no = Prompt.inputInt("번호? ");
 
-    Iterator<String> results = stmt.executeQuery("task/select", Integer.toString(no));
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement(
+            "select * from pms_task where no = ?")) {
+
+      stmt.setInt(1, no);
+
+      try (ResultSet rs =stmt.executeQuery()) {
+        if (!rs.next()) {
+          System.out.println("해당 번호의 작업이 없습니다.");
+          return;
+        }
+        System.out.printf("내용: %s\n", rs.getString("title"));
+        System.out.printf("마감일: %s\n", rs.getDate("deadline"));
+        System.out.printf("상태: %s\n",  rs.getInt("status"));
+        System.out.printf("담당자: %s\n", rs.getString("owner"));
+      }
 
 
-
-
-    String[] fields = results.next().split(",");
-
-
-    System.out.printf("내용: %s\n", fields[1]);
-    System.out.printf("마감일: %s\n", fields[2]);
-    System.out.printf("상태: %s\n",  fields[3]);
-    System.out.printf("담당자: %s\n", fields[4]);
-
-
+    }
   }
 }

@@ -1,16 +1,14 @@
 package com.eomcs.pms.handler;
 
 import java.sql.Date;
-import com.eomcs.driver.Statement;
 import com.eomcs.util.Prompt;
 
 public class TaskUpdateHandler implements Command {
 
-  Statement stmt;
+
   MemberValidatorHandler memberValidator;
 
-  public TaskUpdateHandler(Statement stmt, MemberValidatorHandler memberValidator) {
-    this.stmt = stmt;
+  public TaskUpdateHandler( MemberValidatorHandler memberValidator) {
     this.memberValidator = memberValidator;
   }
 
