@@ -1,51 +1,25 @@
 package com.eomcs.pms.domain;
 
 import java.sql.Date;
+import java.util.List;
 
 public class Task {
   private int no;
   private String content;
   private Date deadline;
-  private String owner;
+  private Member owner;
+  private List<Member> members;
   private int status;
 
   public Task() {}
 
-  public Task(String csv) {
-    String[] data = csv.split(",");
-    this.setNo(Integer.parseInt(data[0]));
-    this.setContent(data[1]);
-    this.setDeadline(Date.valueOf(data[2]));
-    this.setStatus(Integer.parseInt(data[3]));
-    this.setOwner(data[4]);
-  }
 
   @Override
   public String toString() {
     return "Task [no=" + no + ", content=" + content + ", deadline=" + deadline + ", owner=" + owner
-        + ", status=" + status + "]";
+        + ", members=" + members + ", status=" + status + "]";
   }
 
-
-  public String toCsvString() {
-    return String.format("%d,%s,%s,%d,%s", 
-        this.getNo(),
-        this.getContent(),
-        this.getDeadline(),
-        this.getStatus(),
-        this.getOwner());
-  }
-
-  public static Task valueOfCsv(String csv) {
-    String[] data = csv.split(",");
-    Task task = new Task();
-    task.setNo(Integer.parseInt(data[0]));
-    task.setContent(data[1]);
-    task.setDeadline(Date.valueOf(data[2]));
-    task.setStatus(Integer.parseInt(data[3]));
-    task.setOwner(data[4]);
-    return task;
-  }
 
   @Override
   public int hashCode() {
@@ -99,12 +73,23 @@ public class Task {
   public void setDeadline(Date deadline) {
     this.deadline = deadline;
   }
-  public String getOwner() {
+
+  public Member getOwner() {
     return owner;
   }
-  public void setOwner(String owner) {
+
+  public void setOwner(Member owner) {
     this.owner = owner;
   }
+
+  public List<Member> getMembers() {
+    return members;
+  }
+
+  public void setMembers(List<Member> members) {
+    this.members = members;
+  }
+
   public int getStatus() {
     return status;
   }
