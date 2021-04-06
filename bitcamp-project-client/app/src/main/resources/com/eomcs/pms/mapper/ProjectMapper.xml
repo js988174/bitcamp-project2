@@ -13,7 +13,7 @@
     <result column="sdt" property="startDate"/>
     <result column="edt" property="endDate"/>
     <result column="owner" property="owner"/>
-    
+    <result column="project_no" property="projectNo"/>
     
     <association property="owner" javaType="com.eomcs.pms.domain.Member">
       <id column="owner_no" property="no"/>
