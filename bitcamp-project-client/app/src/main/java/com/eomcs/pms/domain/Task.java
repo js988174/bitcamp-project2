@@ -1,60 +1,22 @@
 package com.eomcs.pms.domain;
 
 import java.sql.Date;
-import java.util.List;
 
 public class Task {
   private int no;
   private String content;
   private Date deadline;
   private Member owner;
-  private List<Member> members;
   private int status;
-
-  public Task() {}
-
+  private int projectNo;
+  private String projectTitle;
 
   @Override
   public String toString() {
     return "Task [no=" + no + ", content=" + content + ", deadline=" + deadline + ", owner=" + owner
-        + ", members=" + members + ", status=" + status + "]";
+        + ", status=" + status + ", projectNo=" + projectNo + ", projectTitle=" + projectTitle
+        + "]";
   }
-
-
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((content == null) ? 0 : content.hashCode());
-    result = prime * result + ((deadline == null) ? 0 : deadline.hashCode());
-    result = prime * result + no;
-    return result;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    Task other = (Task) obj;
-    if (content == null) {
-      if (other.content != null)
-        return false;
-    } else if (!content.equals(other.content))
-      return false;
-    if (deadline == null) {
-      if (other.deadline != null)
-        return false;
-    } else if (!deadline.equals(other.deadline))
-      return false;
-    if (no != other.no)
-      return false;
-    return true;
-  }
-
   public int getNo() {
     return no;
   }
@@ -73,29 +35,31 @@ public class Task {
   public void setDeadline(Date deadline) {
     this.deadline = deadline;
   }
-
-  public Member getOwner() {
-    return owner;
-  }
-
-  public void setOwner(Member owner) {
-    this.owner = owner;
-  }
-
-  public List<Member> getMembers() {
-    return members;
-  }
-
-  public void setMembers(List<Member> members) {
-    this.members = members;
-  }
-
   public int getStatus() {
     return status;
   }
   public void setStatus(int status) {
     this.status = status;
   }
+  public Member getOwner() {
+    return owner;
+  }
+  public void setOwner(Member owner) {
+    this.owner = owner;
+  }
+  public int getProjectNo() {
+    return projectNo;
+  }
+  public void setProjectNo(int projectNo) {
+    this.projectNo = projectNo;
+  }
+  public String getProjectTitle() {
+    return projectTitle;
+  }
+  public void setProjectTitle(String projectTitle) {
+    this.projectTitle = projectTitle;
+  }
+
   public static String getStatusLabel(int status) {
     switch (status) {
       case 1:
@@ -106,5 +70,4 @@ public class Task {
         return "신규";
     }
   }
-
 }
