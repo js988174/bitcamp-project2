@@ -11,8 +11,15 @@
     <result column="content" property="content"/>
     <result column="sdt" property="startDate"/>
     <result column="edt" property="endDate"/>
+<<<<<<< HEAD
     
     <association property="owner" javaType="member">
+=======
+    <result column="owner" property="owner"/>
+    <result column="project_no" property="projectNo"/>
+    
+    <association property="owner" javaType="com.eomcs.pms.domain.Member">
+>>>>>>> 95c13c657e7fa220ca835016e369021791a1ad2b
       <id column="owner_no" property="no"/>
       <result column="owner_name" property="name"/>
     </association>
