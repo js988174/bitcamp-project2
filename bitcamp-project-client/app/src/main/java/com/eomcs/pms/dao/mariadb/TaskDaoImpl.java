@@ -45,10 +45,14 @@ public class TaskDaoImpl implements TaskDao {
 
   @Override
   public List<Task> findByProjectNo(int projectNo) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    return sqlSession.selectList("TaskMapper.findByProjectNo", projectNo);
   }
 
+
+  @Override
+  public int deleteByProjectNo(int projectNo) throws Exception {
+    return sqlSession.delete("TaskMapper.deleteByProjectNo", projectNo);   
+  }
 }
 
 

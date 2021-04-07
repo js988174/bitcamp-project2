@@ -20,8 +20,8 @@ public class BoardDaoImpl implements BoardDao {
   }
 
   @Override
-  public List<Board> findAll() throws Exception {
-    return sqlSession.selectList("BoardMapper.findAll");
+  public List<Board> findByKeyword(String keyword) throws Exception {
+    return sqlSession.selectList("BoardMapper.findByKeyword",keyword);
   }
 
   @Override
@@ -44,10 +44,7 @@ public class BoardDaoImpl implements BoardDao {
     return sqlSession.delete("BoardMapper.delete", no);
   }
 
-  @Override
-  public List<Board> findByKeyword(String keyword) throws Exception {
-    return sqlSession.selectList("BoardMapper.findByKeyword", keyword);
-  }
+
 
 }
 
