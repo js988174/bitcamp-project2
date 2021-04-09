@@ -17,12 +17,7 @@ public class ProjectDaoImpl implements ProjectDao {
 
   @Override
   public int insert(Project project) throws Exception {
-    // 1) 프로젝트 정보를 입력한다.
-    int count = sqlSession.insert("ProjectMapper.insert", project);
-
-    insertMembers(project.getNo(), project.getMembers());
-
-    return count;
+    return sqlSession.insert("ProjectMapper.insert", project);
   }
 
   @Override
@@ -53,23 +48,11 @@ public class ProjectDaoImpl implements ProjectDao {
 
   @Override
   public int update(Project project) throws Exception {
-    // 1) 프로젝트 정보를 변경한다.
-    int count = sqlSession.update("ProjectMapper.update", project);
-
-    // 2) 프로젝트의 기존 멤버를 모두 삭제한다.
-    deleteMembers(project.getNo());
-
-    insertMembers(project.getNo(), project.getMembers());
-
-    return count;
+    return sqlSession.update("ProjectMapper.update", project);
   }
 
   @Override
   public int delete(int no) throws Exception {
-    // 1) 프로젝트에 소속된 팀원 정보 삭제
-    deleteMembers(no);
-
-    // 2) 프로젝트 삭제
     return sqlSession.delete("ProjectMapper.delete", no);
   }
 
@@ -79,13 +62,15 @@ public class ProjectDaoImpl implements ProjectDao {
     params.put("projectNo", projectNo);
     params.put("memberNo", memberNo);
     return sqlSession.insert("ProjectMapper.insertMember", params);
+
   }
 
   @Override
   public int insertMembers(int projectNo, List<Member> members) throws Exception {
+
     HashMap<String,Object> params = new HashMap<>();
     params.put("projectNo", projectNo);
-    params.put("memberNo", members);
+    params.put("members", members);
     return sqlSession.insert("ProjectMapper.insertMembers", params);
   }
 

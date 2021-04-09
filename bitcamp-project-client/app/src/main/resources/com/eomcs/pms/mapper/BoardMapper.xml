@@ -14,8 +14,8 @@
     <result column="like_cnt" property="like"/>
     
     <association property="writer" javaType="member">
-      <id column="writer_no" property="no"/>
-      <result column="writer_name" property="name"/>
+	    <id column="writer_no" property="no"/>
+	    <result column="writer_name" property="name"/>
     </association>
     
   </resultMap>

@@ -13,9 +13,9 @@
     <result column="project_no" property="projectNo"/>
     <result column="project_title" property="projectTitle"/>
     
-    <association property="owner" javaType="task">
-      <id column="owner_no" property="no"/>
-      <result column="owner_name" property="name"/>
+    <association property="owner" javaType="member">
+	    <id column="owner_no" property="no"/>
+	    <result column="owner_name" property="name"/>
     </association>
   </resultMap>
   
@@ -56,7 +56,7 @@
       pms_task t
       inner join pms_member m on t.owner=m.no
       inner join pms_project p on t.project_no=p.no
-    where    
+    where
       p.no = #{value}
     order by 
       p.no desc, t.content asc
@@ -95,10 +95,15 @@
     where no = #{value}
   </delete>
 
-  
   <delete id="deleteByProjectNo" parameterType="int">
     delete from pms_task 
     where project_no = #{value}
   </delete>
-
 </mapper>
+
+
+
+
+
+
+

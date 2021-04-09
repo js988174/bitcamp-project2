@@ -1,19 +1,17 @@
 package com.eomcs.pms.handler;
 
 import java.util.List;
-import com.eomcs.pms.dao.ProjectDao;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
+import com.eomcs.pms.service.ProjectService;
 import com.eomcs.util.Prompt;
 
-public class ProjectSearchHandler implements Command{
-  // 프로젝트 관리자 팀원 그외 전체 
-  //  검색어 ?
-  // 번호 프로젝트명 시작일 종료일 관리자 팀원   
-  ProjectDao projectDao;
+public class ProjectSearchHandler implements Command {
 
-  public ProjectSearchHandler(ProjectDao projectDao) {
-    this.projectDao = projectDao;
+  ProjectService projectService;
+
+  public ProjectSearchHandler(ProjectService projectService) {
+    this.projectService =projectService;
   }
 
   @Override
@@ -28,8 +26,7 @@ public class ProjectSearchHandler implements Command{
       keyword = Prompt.inputString("검색어? ");
     }
 
-
-    List<Project> projects = projectDao.findByKeyword(item, keyword);
+    List<Project> projects = projectService.search(item, keyword);
 
     for (Project p : projects) {
 
@@ -54,3 +51,11 @@ public class ProjectSearchHandler implements Command{
     }
   }
 }
+
+
+
+
+
+
+
+
