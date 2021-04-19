@@ -1,10 +1,13 @@
 package com.eomcs.pms.handler;
 
+import java.io.PrintWriter;
 import java.util.List;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.pms.service.ProjectService;
 import com.eomcs.stereotype.Component;
+import com.eomcs.util.CommandRequest;
+import com.eomcs.util.CommandResponse;
 
 @Component(value="/project/list")
 public class ProjectListHandler implements Command {
@@ -16,7 +19,8 @@ public class ProjectListHandler implements Command {
   }
 
   @Override
-  public void service() throws Exception {
+  public void service(CommandRequest request, CommandResponse response) throws Exception {
+    PrintWriter out = response.getWriter();
     System.out.println("[프로젝트 목록]");
 
     List<Project> projects = projectService.list();
@@ -34,7 +38,7 @@ public class ProjectListHandler implements Command {
       }
 
       // 2) 프로젝트 정보를 출력
-      System.out.printf("%d, %s, %s, %s, %s, [%s]\n", 
+      out.printf("%d, %s, %s, %s, %s, [%s]\n", 
           p.getNo(), 
           p.getTitle(), 
           p.getStartDate(),

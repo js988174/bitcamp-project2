@@ -1,9 +1,12 @@
 package com.eomcs.pms.handler;
 
+import java.io.PrintWriter;
 import java.util.List;
 import com.eomcs.pms.domain.Board;
 import com.eomcs.pms.service.BoardService;
 import com.eomcs.stereotype.Component;
+import com.eomcs.util.CommandRequest;
+import com.eomcs.util.CommandResponse;
 
 @Component(value="/board/list")
 public class BoardListHandler implements Command {
@@ -14,14 +17,17 @@ public class BoardListHandler implements Command {
     this.boardService = boardService;
   }
 
+
   @Override
-  public void service() throws Exception {
+  public void service(CommandRequest request, CommandResponse response) throws Exception {
+    PrintWriter out = response.getWriter();
+
     System.out.println("[게시글 목록]");
 
     List<Board> boards = boardService.list();
 
     for (Board b : boards) {
-      System.out.printf("%d, %s, %s, %s, %d\n", 
+      out.printf("%d, %s, %s, %s, %d\n", 
           b.getNo(), 
           b.getTitle(), 
           b.getWriter().getName(),
