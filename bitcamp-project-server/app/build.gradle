@@ -24,9 +24,9 @@ eclipse {
 dependencies {
    
     testImplementation 'junit:junit:4.13'
-implementation 'com.google.code.gson:gson:2.8.6'
-    // This dependency is used by the application.
+     implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.2'
     implementation 'com.google.guava:guava:29.0-jre'
+     implementation 'org.mybatis:mybatis:3.5.6'
 }
 
 application {
