@@ -9,11 +9,11 @@ import com.eomcs.util.CommandResponse;
 import com.eomcs.util.Prompt;
 
 @Component("/login")
-public class LoginHandler implements Command {
+public class LogintHandler implements Command {
 
   MemberService memberService;
 
-  public LoginHandler(MemberService memberService) {
+  public LogintHandler(MemberService memberService) {
     this.memberService = memberService;
   }
 
@@ -30,9 +30,12 @@ public class LoginHandler implements Command {
     Member member = memberService.get(email,password);
     if (member == null) {
       out.println("사용자 정보가 맞지 않습니다.");
+      //
+      request.getSession().invalidate();
       return;
     }
 
+    request.getSession().setAttribute("loginUser", member);
     out.printf("%s 님 환영합니다.\n", member.getName());
   }
 }

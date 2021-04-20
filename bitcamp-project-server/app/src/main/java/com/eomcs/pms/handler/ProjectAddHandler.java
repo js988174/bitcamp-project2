@@ -1,6 +1,7 @@
 package com.eomcs.pms.handler;
 
 import java.io.PrintWriter;
+import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.pms.service.ProjectService;
 import com.eomcs.stereotype.Component;
@@ -23,6 +24,13 @@ public class ProjectAddHandler implements Command {
   public void service(CommandRequest request, CommandResponse response) throws Exception {
     Prompt prompt = request.getPrompt();
     PrintWriter out = response.getWriter();
+
+    Member loginUser = (Member) request.getSession().getAttribute("loginUser");
+    if (loginUser == null) {
+      System.out.println("로그인 하지 않았습니다.");
+      return;
+    }
+
     out.println("[프로젝트 등록]");
 
     Project p = new Project();
@@ -38,6 +46,10 @@ public class ProjectAddHandler implements Command {
     }
 
     p.setMembers(memberValidator.inputMembers("팀원?(완료: 빈 문자열) ", request, response));
+
+    Member writer = new Member();
+    writer.setNo(loginUser.getNo());
+    p.setOwner(writer);
 
     projectService.add(p);
 

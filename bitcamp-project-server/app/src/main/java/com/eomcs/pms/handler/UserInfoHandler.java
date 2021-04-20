@@ -6,16 +6,13 @@ import com.eomcs.stereotype.Component;
 import com.eomcs.util.CommandRequest;
 import com.eomcs.util.CommandResponse;
 
-@Component("/logout")
-public class LogoutHandler implements Command {
+@Component("/userInfo")
+public class UserInfoHandler implements Command {
 
 
   @Override
   public void service(CommandRequest request, CommandResponse response) throws Exception {
     PrintWriter out = response.getWriter();
-
-    out.println("[로그아웃]");
-
 
     Member member = (Member) request.getSession().getAttribute("loginUser");
     if (member == null) {
@@ -23,9 +20,10 @@ public class LogoutHandler implements Command {
       return;
     }
 
-
-    request.getSession().invalidate();
-    out.printf("%s 님 안녕히 가세요.\n", member.getName());
+    out.printf("사용자번호: %d\n", member.getNo());
+    out.printf("이름: %s\n", member.getName());
+    out.printf("이메일: %s\n", member.getEmail());
+    out.printf("사진: %s\n", member.getPhoto());
   }
 }
 
