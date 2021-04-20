@@ -8,22 +8,28 @@ import com.eomcs.pms.service.ProjectService;
 import com.eomcs.stereotype.Component;
 import com.eomcs.util.CommandRequest;
 import com.eomcs.util.CommandResponse;
+import com.eomcs.util.Prompt;
 
-@Component("/project/list")
-public class ProjectListHandler implements Command {
+@Component("/project/detailSearch")
+public class ProjectDetailSearchHandler implements Command {
 
   ProjectService projectService;
 
-  public ProjectListHandler(ProjectService projectService) {
+  public ProjectDetailSearchHandler(ProjectService projectService) {
     this.projectService = projectService;
   }
 
   @Override
   public void service(CommandRequest request, CommandResponse response) throws Exception {
+    Prompt prompt = request.getPrompt();
     PrintWriter out = response.getWriter();
-    out.println("[프로젝트 목록]");
+    out.println("[프로젝트 상세 검색]");
 
-    List<Project> projects = projectService.list();
+    String title = prompt.inputString("프로젝트명?(조건에서 제외: 빈 문자열) ");
+    String owner = prompt.inputString("관리자명?(조건에서 제외: 빈 문자열) ");
+    String member = prompt.inputString("팀원?(조건에서 제외: 빈 문자열) ");
+
+    List<Project> projects = projectService.search(title, owner, member);
 
     for (Project p : projects) {
 

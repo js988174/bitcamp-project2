@@ -8,22 +8,33 @@ import com.eomcs.pms.service.ProjectService;
 import com.eomcs.stereotype.Component;
 import com.eomcs.util.CommandRequest;
 import com.eomcs.util.CommandResponse;
+import com.eomcs.util.Prompt;
 
-@Component("/project/list")
-public class ProjectListHandler implements Command {
+@Component("/project/search")
+public class ProjectSearchHandler implements Command {
 
   ProjectService projectService;
 
-  public ProjectListHandler(ProjectService projectService) {
+  public ProjectSearchHandler(ProjectService projectService) {
     this.projectService = projectService;
   }
 
   @Override
   public void service(CommandRequest request, CommandResponse response) throws Exception {
+    Prompt prompt = request.getPrompt();
     PrintWriter out = response.getWriter();
-    out.println("[프로젝트 목록]");
 
-    List<Project> projects = projectService.list();
+    out.println("[프로젝트 검색]");
+
+    String item = prompt.inputString("항목(1:프로젝트명, 2:관리자명, 3:팀원, 그 외: 전체)? ");
+    String keyword = null;
+    if (item.equals("1") || 
+        item.equals("2") || 
+        item.equals("3")) {
+      keyword = prompt.inputString("검색어? ");
+    }
+
+    List<Project> projects = projectService.search(item, keyword);
 
     for (Project p : projects) {
 

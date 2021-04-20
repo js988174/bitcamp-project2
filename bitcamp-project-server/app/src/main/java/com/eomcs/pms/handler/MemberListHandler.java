@@ -8,7 +8,7 @@ import com.eomcs.stereotype.Component;
 import com.eomcs.util.CommandRequest;
 import com.eomcs.util.CommandResponse;
 
-@Component(value="/member/list")
+@Component("/member/list")
 public class MemberListHandler implements Command {
 
   MemberService memberService;
@@ -20,7 +20,7 @@ public class MemberListHandler implements Command {
   @Override
   public void service(CommandRequest request, CommandResponse response) throws Exception {
     PrintWriter out = response.getWriter();
-    System.out.println("[회원 목록]");
+    out.println("[회원 목록]");
 
     List<Member> list = memberService.list();
 
