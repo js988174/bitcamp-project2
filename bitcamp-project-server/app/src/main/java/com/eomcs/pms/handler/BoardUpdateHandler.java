@@ -12,7 +12,6 @@ import com.eomcs.util.Prompt;
 @Component("/board/update")
 public class BoardUpdateHandler implements Command {
 
-
   BoardService boardService;
 
   public BoardUpdateHandler(BoardService boardService) {
@@ -21,16 +20,16 @@ public class BoardUpdateHandler implements Command {
 
   @Override
   public void service(CommandRequest request, CommandResponse response) throws Exception {
-    Prompt prompt = request.getPrompt();
     PrintWriter out = response.getWriter();
+    Prompt prompt = request.getPrompt();
+
+    out.println("[게시글 변경]");
 
     Member loginUser = (Member) request.getSession().getAttribute("loginUser");
     if (loginUser == null) {
-      System.out.println("로그인 하지 않았습니다.");
+      out.println("로그인 하지 않았습니다!");
       return;
     }
-
-    out.println("[게시글 변경]");
 
     int no = prompt.inputInt("번호? ");
 

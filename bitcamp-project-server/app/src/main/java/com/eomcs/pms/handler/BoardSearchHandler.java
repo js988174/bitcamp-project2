@@ -20,8 +20,8 @@ public class BoardSearchHandler implements Command {
 
   @Override
   public void service(CommandRequest request, CommandResponse response) throws Exception {
-    Prompt prompt = request.getPrompt();
     PrintWriter out = response.getWriter();
+    Prompt prompt = request.getPrompt();
 
     String keyword = prompt.inputString("검색어? ");
 

@@ -20,15 +20,14 @@ public class BoardDeleteHandler implements Command {
 
   @Override
   public void service(CommandRequest request, CommandResponse response) throws Exception {
-    Prompt prompt = request.getPrompt();
     PrintWriter out = response.getWriter();
-
+    Prompt prompt = request.getPrompt();
 
     out.println("[게시글 삭제]");
 
     Member loginUser = (Member) request.getSession().getAttribute("loginUser");
     if (loginUser == null) {
-      System.out.println("로그인 하지 않았습니다.");
+      out.println("로그인 하지 않았습니다!");
       return;
     }
 
@@ -39,7 +38,6 @@ public class BoardDeleteHandler implements Command {
       out.println("해당 번호의 게시글이 없습니다.");
       return;
     }
-
 
     if (oldBoard.getWriter().getNo() != loginUser.getNo()) {
       out.println("삭제 권한이 없습니다!");
@@ -54,7 +52,6 @@ public class BoardDeleteHandler implements Command {
 
     boardService.delete(no);
     out.println("게시글을 삭제하였습니다.");
-
   }
 }
 

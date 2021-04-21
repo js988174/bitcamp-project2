@@ -17,7 +17,6 @@ public class BoardListHandler implements Command {
     this.boardService = boardService;
   }
 
-
   @Override
   public void service(CommandRequest request, CommandResponse response) throws Exception {
     PrintWriter out = response.getWriter();

@@ -21,8 +21,8 @@ public class ProjectSearchHandler implements Command {
 
   @Override
   public void service(CommandRequest request, CommandResponse response) throws Exception {
-    Prompt prompt = request.getPrompt();
     PrintWriter out = response.getWriter();
+    Prompt prompt = request.getPrompt();
 
     out.println("[프로젝트 검색]");
 

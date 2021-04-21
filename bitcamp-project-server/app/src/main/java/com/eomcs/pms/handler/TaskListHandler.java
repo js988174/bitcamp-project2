@@ -20,8 +20,9 @@ public class TaskListHandler implements Command {
 
   @Override
   public void service(CommandRequest request, CommandResponse response) throws Exception {
-    Prompt prompt = request.getPrompt();
     PrintWriter out = response.getWriter();
+    Prompt prompt = request.getPrompt();
+
     out.println("[작업 목록]");
 
     String input = prompt.inputString("프로젝트 번호?(전체: 빈 문자열 또는 0) ");

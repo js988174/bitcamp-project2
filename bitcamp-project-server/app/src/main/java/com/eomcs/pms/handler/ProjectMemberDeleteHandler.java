@@ -20,9 +20,16 @@ public class ProjectMemberDeleteHandler implements Command {
 
   @Override
   public void service(CommandRequest request, CommandResponse response) throws Exception {
-    Prompt prompt = request.getPrompt();
     PrintWriter out = response.getWriter();
+    Prompt prompt = request.getPrompt();
+
     out.println("[프로젝트 멤버 삭제]");
+
+    Member loginUser = (Member) request.getSession().getAttribute("loginUser");
+    if (loginUser == null) {
+      out.println("로그인 하지 않았습니다!");
+      return;
+    }
 
     int no = prompt.inputInt("프로젝트 번호? ");
 
@@ -33,12 +40,17 @@ public class ProjectMemberDeleteHandler implements Command {
       return;
     }
 
+    if (project.getOwner().getNo() != loginUser.getNo()) {
+      out.println("삭제 권한이 없습니다!");
+      return;
+    }
+
     out.printf("프로젝트 명: %s\n", project.getTitle());
     out.println("멤버:");
     for (Member m : project.getMembers()) {
       out.printf("  %s(%d)\n", m.getName(), m.getNo());
     }
-    out.println("------------------------");
+    out.println("---------------------------");
 
     String input = prompt.inputString("정말 삭제하시겠습니까?(y/N) ");
     if (!input.equalsIgnoreCase("Y")) {

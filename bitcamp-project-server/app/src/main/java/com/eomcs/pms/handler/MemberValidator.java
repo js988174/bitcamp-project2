@@ -18,8 +18,8 @@ public class MemberValidator {
   }
 
   public Member inputMember(String promptTitle, CommandRequest request, CommandResponse response) throws Exception {
-    Prompt prompt = request.getPrompt();
     PrintWriter out = response.getWriter();
+    Prompt prompt = request.getPrompt();
 
     while (true) {
       String name = prompt.inputString(promptTitle);
@@ -35,12 +35,11 @@ public class MemberValidator {
     }
   }
 
-  public List<Member> inputMembers(String promptTitle,CommandRequest request, CommandResponse response) throws Exception {
-
+  public List<Member> inputMembers(String promptTitle, CommandRequest request, CommandResponse response) throws Exception {
     ArrayList<Member> members = new ArrayList<>();
 
     while (true) {
-      Member member = inputMember(promptTitle, request,response);
+      Member member = inputMember(promptTitle, request, response);
       if (member == null) {
         return members;
       } else {

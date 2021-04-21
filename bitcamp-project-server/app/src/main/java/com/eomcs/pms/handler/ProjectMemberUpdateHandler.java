@@ -23,9 +23,16 @@ public class ProjectMemberUpdateHandler implements Command {
 
   @Override
   public void service(CommandRequest request, CommandResponse response) throws Exception {
-    Prompt prompt = request.getPrompt();
     PrintWriter out = response.getWriter();
+    Prompt prompt = request.getPrompt();
+
     out.println("[프로젝트 멤버 변경]");
+
+    Member loginUser = (Member) request.getSession().getAttribute("loginUser");
+    if (loginUser == null) {
+      out.println("로그인 하지 않았습니다!");
+      return;
+    }
 
     int no = prompt.inputInt("프로젝트 번호? ");
 
@@ -36,12 +43,17 @@ public class ProjectMemberUpdateHandler implements Command {
       return;
     }
 
+    if (project.getOwner().getNo() != loginUser.getNo()) {
+      out.println("변경 권한이 없습니다!");
+      return;
+    }
+
     out.printf("프로젝트 명: %s\n", project.getTitle());
     out.println("멤버:");
     for (Member m : project.getMembers()) {
       out.printf("  %s(%d)\n", m.getName(), m.getNo());
     }
-    out.println("------------------------");
+    out.println("---------------------------");
 
     // 프로젝트 팀원 정보를 입력 받는다.
     out.println("프로젝트의 멤버를 새로 등록하세요.");

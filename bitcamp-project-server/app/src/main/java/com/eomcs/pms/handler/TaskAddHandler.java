@@ -26,8 +26,9 @@ public class TaskAddHandler implements Command {
 
   @Override
   public void service(CommandRequest request, CommandResponse response) throws Exception {
-    Prompt prompt = request.getPrompt();
     PrintWriter out = response.getWriter();
+    Prompt prompt = request.getPrompt();
+
     out.println("[작업 등록]");
 
     // 1) 현재 등록된 프로젝트 목록을 가져온다.

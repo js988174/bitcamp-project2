@@ -25,7 +25,6 @@ public class BoardDetailHandler implements Command {
     PrintWriter out = response.getWriter();
     Prompt prompt = request.getPrompt();
 
-
     out.println("[게시글 상세보기]");
 
     int no = prompt.inputInt("번호? ");

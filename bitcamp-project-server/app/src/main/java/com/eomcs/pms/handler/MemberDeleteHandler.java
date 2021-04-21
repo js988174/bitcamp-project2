@@ -18,8 +18,8 @@ public class MemberDeleteHandler implements Command {
 
   @Override
   public void service(CommandRequest request, CommandResponse response) throws Exception {
-    Prompt prompt = request.getPrompt();
     PrintWriter out = response.getWriter();
+    Prompt prompt = request.getPrompt();
 
     out.println("[회원 삭제]");
 

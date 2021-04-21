@@ -9,14 +9,13 @@ import com.eomcs.util.CommandResponse;
 @Component("/userInfo")
 public class UserInfoHandler implements Command {
 
-
   @Override
   public void service(CommandRequest request, CommandResponse response) throws Exception {
     PrintWriter out = response.getWriter();
 
     Member member = (Member) request.getSession().getAttribute("loginUser");
     if (member == null) {
-      out.println("로그인 하지 않았습니다.");
+      out.println("로그인 하지 않았습니다!");
       return;
     }
 

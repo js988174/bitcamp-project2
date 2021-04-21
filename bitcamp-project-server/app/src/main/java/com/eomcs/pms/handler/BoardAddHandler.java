@@ -30,7 +30,7 @@ public class BoardAddHandler implements Command {
 
     Member loginUser = (Member) request.getSession().getAttribute("loginUser");
     if (loginUser == null) {
-      out.println("로그인 하지 않습니다!");
+      out.println("로그인 하지 않았습니다!");
       return;
     }
 
@@ -40,9 +40,7 @@ public class BoardAddHandler implements Command {
     b.setContent(prompt.inputString("내용? "));
 
     // 작성자는 로그인 사용자이다.
-    Member writer = new Member();
-    writer.setNo(loginUser.getNo());
-    b.setWriter(writer);
+    b.setWriter(loginUser);
 
     boardService.add(b);
     out.println("게시글을 등록하였습니다.");

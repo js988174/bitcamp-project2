@@ -9,23 +9,19 @@ import com.eomcs.util.CommandResponse;
 @Component("/logout")
 public class LogoutHandler implements Command {
 
-
   @Override
   public void service(CommandRequest request, CommandResponse response) throws Exception {
     PrintWriter out = response.getWriter();
 
-    out.println("[로그아웃]");
-
-
     Member member = (Member) request.getSession().getAttribute("loginUser");
     if (member == null) {
-      out.println("로그인 하지 않았습니다.");
+      out.println("로그인 하지 않았습니다!");
       return;
     }
 
-
     request.getSession().invalidate();
-    out.printf("%s 님 안녕히 가세요.\n", member.getName());
+
+    out.printf("%s 님 안녕히 가세요!\n", member.getName());
   }
 }
 
