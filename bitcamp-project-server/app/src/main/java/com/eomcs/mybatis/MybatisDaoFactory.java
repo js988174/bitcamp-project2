@@ -7,8 +7,7 @@ public class MybatisDaoFactory {
 
   DaoWorker daoWorker;
 
-
-  public MybatisDaoFactory(SqlSessionFactory  sqlSessionFactory) {
+  public MybatisDaoFactory(SqlSessionFactory sqlSessionFactory) {
     this.daoWorker = new DaoWorker(sqlSessionFactory);
   }
 

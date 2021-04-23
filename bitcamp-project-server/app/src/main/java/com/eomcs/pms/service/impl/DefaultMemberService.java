@@ -18,10 +18,7 @@ public class DefaultMemberService implements MemberService {
   // 등록 업무
   @Override
   public int add(Member member) throws Exception {
-
     return memberDao.insert(member);
-
-
   }
 
   // 조회 업무
@@ -49,17 +46,13 @@ public class DefaultMemberService implements MemberService {
   // 변경 업무
   @Override
   public int update(Member member) throws Exception {
-
     return memberDao.update(member);
-
   }
 
   // 삭제 업무
   @Override
   public int delete(int no) throws Exception {
-
     return memberDao.delete(no);
-
   }
 
   // 이름으로 찾기

@@ -1,9 +1,11 @@
 
 plugins {
-  
-    id 'application'
+
     id 'java'
-    id 'eclipse'
+    id 'eclipse-wtp'
+    
+    // 웹 어플리케이션 패키지 파일을 생성할 때 사용할 플러그인 등록
+    id 'war'
 }
 
 repositories {
@@ -21,15 +23,14 @@ eclipse {
         name = "bitcamp-project-server"
     }
 }
+
 dependencies {
    
+   implementation 'javax.servlet:javax.servlet-api:4.0.1'
     testImplementation 'junit:junit:4.13'
      implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.2'
     implementation 'com.google.guava:guava:29.0-jre'
      implementation 'org.mybatis:mybatis:3.5.6'
 }
 
-application {
-    // Define the main class for the application.
-    mainClass = 'eom.eomcs.pms.ServerApp'
-}
+

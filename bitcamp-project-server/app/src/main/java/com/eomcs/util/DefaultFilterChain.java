@@ -4,18 +4,15 @@ package com.eomcs.util;
 // => 다음 체인의 주소를 보관해야 한다.
 // => 실행할 필터를 보관해야 한다.
 // 
-
-public class DefaultFilterChain implements FilterChain{
+public class DefaultFilterChain implements FilterChain {
 
   private FilterChain nextChain;
   private Filter filter;
 
   public DefaultFilterChain(FilterChain nextChain, Filter filter) {
-    super();
     this.nextChain = nextChain;
     this.filter = filter;
   }
-
 
   @Override
   public void doFilter(CommandRequest request, CommandResponse response) throws Exception {
@@ -38,6 +35,4 @@ public class DefaultFilterChain implements FilterChain{
   public void setFilter(Filter filter) {
     this.filter = filter;
   }
-
-
 }
