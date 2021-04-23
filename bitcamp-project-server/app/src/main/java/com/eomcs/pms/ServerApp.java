@@ -39,8 +39,11 @@ import com.eomcs.pms.service.impl.DefaultMemberService;
 import com.eomcs.pms.service.impl.DefaultProjectService;
 import com.eomcs.pms.service.impl.DefaultTaskService;
 import com.eomcs.stereotype.Component;
+import com.eomcs.util.CommandFilter;
 import com.eomcs.util.CommandRequest;
 import com.eomcs.util.CommandResponse;
+import com.eomcs.util.Filter;
+import com.eomcs.util.FilterList;
 import com.eomcs.util.Prompt;
 import com.eomcs.util.Session;
 
@@ -53,6 +56,9 @@ public class ServerApp {
 
   // 객체를 보관할 컨테이너 준비
   Map<String,Object> objMap = new HashMap<>();
+
+  // 필터를 보관할 컬렉션 준비
+  ArrayList<Filter> filters = new ArrayList<>();
 
   // 세션을 보관할 저장소
   Map<String,Session> sessionMap = new HashMap<>();
@@ -123,7 +129,7 @@ public class ServerApp {
     objMap.put("memberValidator", memberValidator);
 
     // 5) Command 구현체를 자동 생성하여 맵에 등록
-    registerCommands();
+    registerCommandAndFilter();
 
     // 클라이언트 연결을 기다리는 서버 소켓 생성
     try (ServerSocket serverSocket = new ServerSocket(this.port)) {
@@ -225,9 +231,7 @@ public class ServerApp {
         sessionMap.put(sessionId, session);
       }
 
-      // 클라이언트 요청에 대해 기록(log)을 남긴다.
-      System.out.printf("[%s:%d] %s\n", 
-          remoteAddr.getHostString(), remoteAddr.getPort(), requestLine);
+
 
 
       if (requestLine.equalsIgnoreCase("serverstop")) {
@@ -256,6 +260,16 @@ public class ServerApp {
 
       CommandResponse response = new CommandResponse(out);
 
+      FilterList filterList = new FilterList();
+
+      CommandFilter commandFilter = new CommandFilter(command);
+
+      filterList.add(commandFilter);
+
+      for(Filter filter : filters) {
+        filterList.add(filter);
+      }
+
       // 클라이언트가 요청한 작업을 처리한 후 응답 데이터를 보내기 전에 
       // 먼저 클라이언트에게 응답 헤더를 보낸다.
       out.println("OK");
@@ -266,7 +280,9 @@ public class ServerApp {
 
       // Command 구현체를 실행한다.
       try {
-        command.service(request, response);
+        // => 필터 목록에서 맨 앞의 필터 체인을 꺼내서 실행한다.
+        filterList.getHeaderChain().doFilter(request, response);
+
         out.println();
         out.flush();
 
@@ -296,41 +312,55 @@ public class ServerApp {
     } catch (Exception e) {}
   }
 
-  private void registerCommands() throws Exception {
+  private void registerCommandAndFilter() throws Exception {
 
     // 패키지에 소속된 모든 클래스의 타입 정보를 알아낸다.
     ArrayList<Class<?>> components = new ArrayList<>();
-    loadComponents("com.eomcs.pms.handler", components);
+    loadComponents("com.eomcs.pms", components);
 
-    for (Class<?> clazz : components) {
+    // 클래스 목록에서 클래스 정보를 한 개 꺼낸다.
+    for (Class<?> clazz : components) {     
 
-      // 클래스 목록에서 클래스 정보를 한 개 꺼내, Command 구현체인지 검사한다.
-      if (!isCommand(clazz)) {
-        continue;
+      // 클래스 목록에서 클래스 정보를 한 개 꺼낸다.
+      if (isType(clazz, Command.class)) { // Command 구현체라면,
+        prepareObject(clazz);
+      } else if (isType(clazz, Filter.class)) { // Filter 구현체라면,
+        prepareFilter(clazz);
       }
-
-      // 클래스 정보를 이용하여 객체를 생성한다.
-      Object command = createCommand(clazz);
-
-      // 클래스 정보에서 @Component 애노테이션 정보를 가져온다.
-      Component compAnno = clazz.getAnnotation(Component.class);
-
-      // 애노테이션 정보에서 맵에 객체를 저장할 때 키로 사용할 문자열 꺼낸다.
-      String key = null;
-      if (compAnno.value().length() == 0){
-        key = clazz.getName(); // 키로 사용할 문자열이 없으면 클래스 이름을 키로 사용한다.
-      } else {
-        key = compAnno.value();
-      }
-
-      // 생성된 객체를 객체 맵에 보관한다.
-      objMap.put(key, command);
-
-      System.out.println("인스턴스 생성 ===> " + command.getClass().getName());
     }
   }
 
-  private boolean isCommand(Class<?> type) {
+  private void prepareObject(Class<?> clazz) throws Exception {
+    // 클래스 정보를 이용하여 객체를 생성한다.
+    Object command = createCommand(clazz);
+
+    // 클래스 정보에서 @Component 애노테이션 정보를 가져온다.
+    Component compAnno = clazz.getAnnotation(Component.class);
+
+    // 애노테이션 정보에서 맵에 객체를 저장할 때 키로 사용할 문자열 꺼낸다.
+    String key = null;
+    if (compAnno.value().length() == 0){
+      key = clazz.getName(); // 키로 사용할 문자열이 없으면 클래스 이름을 키로 사용한다.
+    } else {
+      key = compAnno.value();
+    }
+    // 생성된 객체를 객체 맵에 보관한다.
+    objMap.put(key, command);
+
+    System.out.println("인스턴스 생성 ===> " + command.getClass().getName());
+  }
+
+  private void prepareFilter(Class<?> clazz) throws Exception{
+    // 클래스 정보를 이용하여 객체를 생성한다.
+    Object filter = createCommand(clazz);
+
+    // 생성된 Filter 객체를 객체 목록에 보관한다.
+    filters.add((Filter)filter);
+
+    System.out.println("Filter 생성 : " + clazz.getName());
+  }
+
+  private boolean isType(Class<?> type, Class<?> target) {
     // 클래스가 아니라 인터페이스라면 무시한다.
     if (type.isInterface()) {
       return false;
@@ -341,7 +371,7 @@ public class ServerApp {
 
     // 클래스가 구현한 인터페이스 중에서 Command 인터페이스가 있는지 조사한다.
     for (Class<?> i : interfaces) {
-      if (i == Command.class) {
+      if (i == target) {
         return true;
       }
     }
