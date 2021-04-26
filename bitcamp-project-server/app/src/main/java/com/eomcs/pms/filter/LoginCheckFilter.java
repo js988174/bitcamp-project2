@@ -23,7 +23,7 @@ public class LoginCheckFilter implements Filter {
       }
     }
 
-    // 로그인이 필요한 서비스에 대해서 정상적으로 로그인 되어 있다면, 다음 필터를 실행한다.\
+    // 로그인이 필요한 서비스에 대해서 정상적으로 로그인 되어 있다면, 다음 필터를 실행한다.
     nextChain.doFilter(request, response);
 
   }

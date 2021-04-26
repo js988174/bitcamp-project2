@@ -20,6 +20,7 @@ public class HelloHandler implements Servlet {
   @Override
   public void destroy() { 
   }
+
   @Override
   public ServletConfig getServletConfig() {
     return null;
@@ -36,7 +37,6 @@ public class HelloHandler implements Servlet {
     PrintWriter out = response.getWriter();
     out.println("안녕하세요!");
     out.println("hello");
-
   }
 
 }
