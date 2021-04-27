@@ -13,12 +13,11 @@ import javax.servlet.annotation.WebServlet;
 public class HelloHandler implements Servlet {
 
   @Override
-  public void init(ServletConfig config) throws ServletException{
-
+  public void init(ServletConfig config) throws ServletException {
   }
 
   @Override
-  public void destroy() { 
+  public void destroy() {
   }
 
   @Override
@@ -36,8 +35,8 @@ public class HelloHandler implements Servlet {
       throws ServletException, IOException {
     PrintWriter out = response.getWriter();
     out.println("안녕하세요!");
-    out.println("hello");
+    out.println("Hello!");
+
   }
 
 }
-

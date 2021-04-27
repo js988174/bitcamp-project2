@@ -3,22 +3,21 @@ package com.eomcs.pms.web;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import javax.servlet.GenericServlet;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import com.eomcs.pms.domain.Board;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.service.BoardService;
 
 @SuppressWarnings("serial")
-@WebServlet("/board/add")
-public class BoardAddHandler extends GenericServlet {
+@WebServlet("/board/delete")
+public class BoardDeleteHandler extends HttpServlet {
 
   @Override
-  public void service(ServletRequest request, ServletResponse response)
+  protected void service(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
     BoardService boardService = (BoardService) request.getServletContext().getAttribute("boardService");
@@ -26,21 +25,25 @@ public class BoardAddHandler extends GenericServlet {
     response.setContentType("text/plain;charset=UTF-8");
     PrintWriter out = response.getWriter();
 
-    out.println("[게시글 등록]");
-
-    Board b = new Board();
-
-    b.setTitle(request.getParameter("title"));
-    b.setContent(request.getParameter("content"));
-
-    // 작성자는 로그인 사용자이다.
-    HttpServletRequest httpRequest = (HttpServletRequest) request;
-    Member loginUser = (Member) httpRequest.getSession().getAttribute("loginUser");
-    b.setWriter(loginUser);
+    out.println("[게시글 삭제]");
 
     try {
-      boardService.add(b);
-      out.println("게시글을 등록하였습니다.");
+      int no = Integer.parseInt(request.getParameter("no"));
+
+      Board oldBoard = boardService.get(no);
+      if (oldBoard == null) {
+        out.println("해당 번호의 게시글이 없습니다.");
+        return;
+      }
+
+      Member loginUser = (Member) request.getSession().getAttribute("loginUser");
+      if (oldBoard.getWriter().getNo() != loginUser.getNo()) {
+        out.println("삭제 권한이 없습니다!");
+        return;
+      }
+
+      boardService.delete(no);
+      out.println("게시글을 삭제하였습니다.");
 
     } catch (Exception e) {
       StringWriter strWriter = new StringWriter();

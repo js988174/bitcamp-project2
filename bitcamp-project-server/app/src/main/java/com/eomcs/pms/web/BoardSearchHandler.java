@@ -4,34 +4,43 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
-import javax.servlet.Servlet;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import com.eomcs.pms.domain.Board;
 import com.eomcs.pms.service.BoardService;
 
-@WebServlet("/board/list")
-public class BoardListHandler implements Servlet {
+@SuppressWarnings("serial")
+@WebServlet("/board/search")
+public class BoardSearchHandler extends HttpServlet {
 
   @Override
-  public void service(ServletRequest request, ServletResponse response)
+  protected void service(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    // 클라이언트가 /board/list 를 요청하면 톰캣 서버가 이 메서드를 호출한다. 
 
     BoardService boardService = (BoardService) request.getServletContext().getAttribute("boardService");
 
     response.setContentType("text/plain;charset=UTF-8");
     PrintWriter out = response.getWriter();
 
-    out.println("[게시글 목록]");
-
     try {
-      List<Board> boards = boardService.list();
+      String keyword = request.getParameter("keyword");
 
-      for (Board b : boards) {
+      if (keyword.length() == 0) {
+        out.println("검색어를 입력하세요.");
+        return;
+      }
+
+      List<Board> list = boardService.search(keyword);
+
+      if (list.size() == 0) {
+        out.println("검색어에 해당하는 게시글이 없습니다.");
+        return;
+      }
+
+      for (Board b : list) {
         out.printf("%d, %s, %s, %s, %d\n", 
             b.getNo(), 
             b.getTitle(), 
@@ -39,33 +48,13 @@ public class BoardListHandler implements Servlet {
             b.getRegisteredDate(),
             b.getViewCount());
       }
+
     } catch (Exception e) {
-      // 상세 오류 내용을 StringWriter로 출력한다.
       StringWriter strWriter = new StringWriter();
       PrintWriter printWriter = new PrintWriter(strWriter);
       e.printStackTrace(printWriter);
-
-      // StringWriter 에 들어 있는 출력 내용을 꺼내 클라이언트로 보낸다.
       out.println(strWriter.toString());
     }
-  }
-
-  @Override
-  public void init(ServletConfig config) throws ServletException {
-  }
-
-  @Override
-  public void destroy() {
-  }
-
-  @Override
-  public String getServletInfo() {
-    return null;
-  }
-
-  @Override
-  public ServletConfig getServletConfig() {
-    return null;
   }
 }
 

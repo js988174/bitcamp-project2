@@ -13,20 +13,8 @@ import javax.servlet.annotation.WebServlet;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.service.MemberService;
 
-@WebServlet("/member/list")
+@WebServlet("/member/list") 
 public class MemberListHandler implements Servlet {
-
-  @Override
-  public void init(ServletConfig config) throws ServletException {
-    // TODO Auto-generated method stub
-
-  }
-
-  @Override
-  public ServletConfig getServletConfig() {
-    // TODO Auto-generated method stub
-    return null;
-  }
 
   @Override
   public void service(ServletRequest request, ServletResponse response)
@@ -53,20 +41,26 @@ public class MemberListHandler implements Servlet {
       StringWriter strWriter = new StringWriter();
       PrintWriter printWriter = new PrintWriter(strWriter);
       e.printStackTrace(printWriter);
-
       out.println(strWriter.toString());
     }
   }
+
   @Override
-  public String getServletInfo() {
-    // TODO Auto-generated method stub
-    return null;
+  public void init(ServletConfig config) throws ServletException {
   }
 
   @Override
   public void destroy() {
-    // TODO Auto-generated method stub
+  }
 
+  @Override
+  public ServletConfig getServletConfig() {
+    return null;
+  }
+
+  @Override
+  public String getServletInfo() {
+    return null;
   }
 }
 
