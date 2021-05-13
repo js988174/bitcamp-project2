@@ -1,4 +1,4 @@
-package com.eomcs.pms.web.fliter;
+package com.eomcs.pms.web.filter;
 
 import java.io.IOException;
 import javax.servlet.Filter;
